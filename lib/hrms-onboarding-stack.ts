@@ -17,7 +17,7 @@ export class HrmsOnboardingStack extends cdk.Stack {
 
     // ✅ Lambda Function
     const createEmployeeLambda = new lambda.Function(this, 'CreateEmployeeFn', {
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_20_X,  // ✅ updated
       handler: 'index.handler',
       code: lambda.Code.fromAsset('lambda'),
       environment: {
