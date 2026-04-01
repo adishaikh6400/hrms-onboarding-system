@@ -1,14 +1,45 @@
-# Welcome to your CDK TypeScript project
+1. Project Title + Description
+# HRMS Onboarding System
 
-This is a blank project for CDK development with TypeScript.
+Automated employee onboarding system using AWS CDK, Lambda, API Gateway, and DynamoDB.
+2. Tech Stack
+## Tech Stack
+- AWS CDK
+- AWS Lambda
+- API Gateway
+- DynamoDB
+- Node.js
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
-## Useful commands
+3. Setup Instructions (MOST IMPORTANT 🔥)
+## Setup Instructions
 
-* `npm run build`   compile typescript to js
-* `npm run watch`   watch for changes and compile
-* `npm run test`    perform the jest unit tests
-* `npx cdk deploy`  deploy this stack to your default AWS account/region
-* `npx cdk diff`    compare deployed stack with current state
-* `npx cdk synth`   emits the synthesized CloudFormation template
+### 1. Clone repo
+git clone https://github.com/adishaikh6400/hrms-onboarding-system.git
+cd hrms-onboarding-system
+
+### 2. Install dependencies
+npm install
+
+### 3. Configure AWS
+aws configure
+
+### 4. Bootstrap CDK (first time only)
+cdk bootstrap
+
+### 5. Deploy
+cdk deploy
+4. API Testing
+## API Testing
+
+POST /employee
+
+Body:
+{
+  "name": "Adi",
+  "email": "adi@test.com"
+}
+5. Notes (optional but useful)
+## Notes
+- Make sure AWS CLI is installed
+- Make sure Node.js is installed
