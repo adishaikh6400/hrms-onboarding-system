@@ -12,8 +12,8 @@ export class HrmsOnboardingStack extends cdk.Stack {
 
     // ✅ DynamoDB (unchanged)
     const table = new dynamodb.Table(this, 'EmployeesTable', {
-      tableName: 'hrms-employees',
-      partitionKey: { name: 'id', type: dynamodb.AttributeType.STRING },
+      tableName: 'hrms-employees-v2',
+      partitionKey: { name: 'employee_id', type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });

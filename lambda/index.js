@@ -16,22 +16,28 @@ exports.handler = async (event) => {
         : event.body;
     }
 
+    // ─── Validation ────────────────────────────────────────────
     if (!body.name || !body.email) {
       return response(400, { message: "name and email are required" });
     }
 
-    const id         = uuidv4();
-    const created_at = new Date().toISOString();
+    const employee_id = uuidv4();
+    const created_at  = new Date().toISOString();
 
     // ─── 1. Save to DynamoDB ───────────────────────────────────
     await dynamoClient.send(new PutItemCommand({
       TableName: process.env.TABLE_NAME,
       Item: {
-        id:         { S: id },
-        name:       { S: body.name },
-        email:      { S: body.email },
-        status:     { S: 'ONBOARDED' },
-        created_at: { S: created_at },
+        employee_id:     { S: employee_id },
+        name:            { S: body.name },
+        email:           { S: body.email },
+        department:      { S: body.department      || 'Not Assigned' },
+        role:            { S: body.role             || 'Not Assigned' },
+        manager:         { S: body.manager          || 'Not Assigned' },
+        joining_date:    { S: body.joining_date     || 'Not Assigned' },
+        employment_type: { S: body.employment_type  || 'Not Assigned' },
+        status:          { S: 'ONBOARDED' },
+        created_at:      { S: created_at },
       },
     }));
 
@@ -51,24 +57,20 @@ exports.handler = async (event) => {
     // ─── 3. Send Welcome Email via SES ────────────────────────
     await sesClient.send(new SendEmailCommand({
       Source: process.env.SES_FROM_EMAIL,
-      Destination: {
-        ToAddresses: [body.email],
-      },
+      Destination: { ToAddresses: [body.email] },
       Message: {
-        Subject: {
-          Data: '🎉 Welcome to HRMS - You are onboarded!',
-        },
+        Subject: { Data: '🎉 Welcome to HRMS - You are onboarded!' },
         Body: {
           Text: {
-            Data: `Hi ${body.name},\n\nWelcome to the company!\n\nYour account has been created.\nLogin Email: ${body.email}\nTemporary Password: Welcome@123\n\nPlease change your password on first login.\n\nRegards,\nHRMS Team`,
+            Data: `Hi ${body.name},\n\nWelcome to the company!\n\nHere are your details:\nDepartment: ${body.department}\nRole: ${body.role}\nManager: ${body.manager}\nJoining Date: ${body.joining_date}\nEmployment Type: ${body.employment_type}\n\nLogin Email: ${body.email}\nTemporary Password: Welcome@123\n\nPlease change your password on first login.\n\nRegards,\nHRMS Team`,
           },
         },
       },
     }));
 
     return response(200, {
-      message: 'Employee onboarded, Cognito user created, welcome email sent ✅',
-      employee_id: id,
+      message: 'Employee onboarded successfully ✅',
+      employee_id,
     });
 
   } catch (error) {
